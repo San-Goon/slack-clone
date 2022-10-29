@@ -10,7 +10,7 @@ interface Props {
   data: IDM | IChat;
 }
 
-const BACK_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3095' : 'https://sleact.nodebird.com';
+const BACK_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:3095' : 'https://slack.nodebird.com';
 const Chat: VFC<Props> = ({ data }) => {
   const { workspace } = useParams<{ workspace: string; channel: string }>();
   const user = 'Sender' in data ? data.Sender : data.User;

@@ -14,8 +14,8 @@ module.exports = {
     await queryInterface.bulkInsert("workspaces", [
       {
         id: 1,
-        name: "Sleact",
-        url: "sleact",
+        name: "Slack",
+        url: "slack",
         createdAt: new Date(),
         updatedAt: new Date(),
       },

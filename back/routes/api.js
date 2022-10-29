@@ -805,9 +805,9 @@ router.post("/users", isNotLoggedIn, async (req, res, next) => {
       nickname: req.body.nickname,
       password: hashedPassword,
     });
-    const sleact = await Workspace.findOne({ where: { id: 1 } });
+    const slack = await Workspace.findOne({ where: { id: 1 } });
     const channel = await Channel.findOne({ where: { id: 1 } });
-    await sleact.addMembers(user);
+    await slack.addMembers(user);
     await channel.addMembers(user);
     res.status(201).send("ok");
   } catch (error) {
