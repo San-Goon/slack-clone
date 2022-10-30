@@ -38,7 +38,7 @@ const config: Configuration = {
             [
               '@babel/preset-env',
               {
-                targets: { browsers: ['IE 10'] },
+                targets: { browsers: ['last 2 chrome versions'] },
                 debug: isDevelopment,
               },
             ],
