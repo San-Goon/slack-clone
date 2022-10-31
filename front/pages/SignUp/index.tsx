@@ -1,31 +1,45 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Form, Header, Input, Label, LinkContainer } from '@pages/SignUp/styles';
+import { Button, Form, Header, Input, Label, Error, LinkContainer } from '@pages/SignUp/styles';
 
 const SignUp = () => {
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
+  const [mismatchError, setMismatchError] = useState(false);
 
   const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   }, []);
+
   const onChangeNickname = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setNickname(e.target.value);
   }, []);
-  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  }, []);
-  const onChangePasswordCheck = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordCheck(e.target.value);
-  }, []);
+
+  const onChangePassword = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(e.target.value);
+      setMismatchError(e.target.value === passwordCheck);
+    },
+    [passwordCheck],
+  );
+
+  const onChangePasswordCheck = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setPasswordCheck(e.target.value);
+      setMismatchError(e.target.value === password);
+    },
+    [password],
+  );
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log('submit!', email, nickname, password, passwordCheck);
+      if (!mismatchError) {
+        console.log('submit!', email, nickname, password, passwordCheck);
+      }
     },
-    [email, nickname, password, passwordCheck],
+    [email, nickname, password, passwordCheck, mismatchError],
   );
 
   return (
@@ -61,6 +75,7 @@ const SignUp = () => {
               onChange={onChangePasswordCheck}
             />
           </div>
+          {mismatchError ? <Error>비밀번호가 일치하지 않습니다.</Error> : null}
         </Label>
         <Button type="submit">회원가입</Button>
       </Form>
