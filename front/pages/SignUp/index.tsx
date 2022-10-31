@@ -7,21 +7,13 @@ import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 
 const SignUp = () => {
-  const { data } = useSWR('/api/users', fetcher);
+  const { data } = useSWR('http://localhost:3095/api/users', fetcher);
   const navigate = useNavigate();
   const [email, onChangeEmail] = useInput();
   const [nickname, onChangeNickname] = useInput();
   const [password, onChangePassword] = useInput();
   const [passwordCheck, onChangePasswordCheck] = useInput();
   const [errorMessage, setErrorMessage] = useState('');
-
-  if (data === undefined) {
-    return <div>로딩중...</div>;
-  }
-
-  if (data) {
-    navigate('/workspace/slack/channel/일반');
-  }
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,6 +54,10 @@ const SignUp = () => {
     },
     [email, nickname, password, passwordCheck],
   );
+
+  if (data) {
+    navigate('/workspace/channel');
+  }
 
   return (
     <div id="container">
