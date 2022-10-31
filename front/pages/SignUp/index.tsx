@@ -3,14 +3,25 @@ import { Button, Form, Header, Input, Label, Error, LinkContainer } from '@pages
 import useInput from '@hooks/useInput';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import fetcher from '@utils/fetcher';
+import useSWR from 'swr';
 
 const SignUp = () => {
+  const { data } = useSWR('/api/users', fetcher);
   const navigate = useNavigate();
   const [email, onChangeEmail] = useInput();
   const [nickname, onChangeNickname] = useInput();
   const [password, onChangePassword] = useInput();
   const [passwordCheck, onChangePasswordCheck] = useInput();
   const [errorMessage, setErrorMessage] = useState('');
+
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  if (data) {
+    navigate('/workspace/slack/channel/일반');
+  }
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,7 +55,7 @@ const SignUp = () => {
             if (error.response.status === 403) {
               setErrorMessage(error.response.data);
             } else {
-              setErrorMessage('에러가 발생했습니다 잠시후 다시 시도해주세요.');
+              setErrorMessage('알수없는 에러가 발생했습니다 잠시후 다시 시도해주세요.');
             }
           });
       }

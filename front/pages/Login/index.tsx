@@ -1,20 +1,49 @@
 import React, { useCallback, useState } from 'react';
 import useInput from '@hooks/useInput';
 import { Button, Form, Header, Input, Label, Error, LinkContainer } from '@pages/SignUp/styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const Login = () => {
+  const { data, mutate } = useSWR('http://localhost:3095/api/users', fetcher, {
+    dedupingInterval: 100000,
+  });
+  const navigate = useNavigate();
+
   const [errorMessage, setErrorMessage] = useState('');
   const [email, onChangeEmail] = useInput();
   const [password, onChangePassword] = useInput();
 
+  if (data === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  if (data) {
+    navigate('/workspace/slack/channel/일반');
+  }
+
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      console.log('submit!', email, password);
+      setErrorMessage('');
+      axios
+        .post('http://localhost:3095/api/users/login', { email, password }, { withCredentials: true })
+        .then(() => {
+          mutate();
+        })
+        .catch((error) => {
+          if (error.response.status === 401) {
+            setErrorMessage(error.response.data);
+          } else {
+            setErrorMessage('알수없는 에러가 발생했습니다 잠시후 다시 시도해주세요.');
+          }
+        });
     },
     [email, password],
   );
+
   return (
     <div id="container">
       <Header>Slack</Header>
@@ -35,14 +64,7 @@ const Login = () => {
         <Label id="password-label">
           <span>비밀번호</span>
           <div>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="8자 이상 입력해 주세요."
-              value={password}
-              onChange={onChangePassword}
-            />
+            <Input type="password" id="password" name="password" value={password} onChange={onChangePassword} />
           </div>
           {errorMessage ? <Error>{errorMessage}</Error> : null}
         </Label>
