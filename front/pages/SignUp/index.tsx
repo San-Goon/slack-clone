@@ -6,7 +6,7 @@ const SignUp = () => {
   const [nickname, setNickname] = useState('');
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
-  const [mismatchError, setMismatchError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
@@ -16,30 +16,36 @@ const SignUp = () => {
     setNickname(e.target.value);
   }, []);
 
-  const onChangePassword = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(e.target.value);
-      setMismatchError(e.target.value !== passwordCheck);
-    },
-    [passwordCheck],
-  );
+  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  }, []);
 
-  const onChangePasswordCheck = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value !== password);
-    },
-    [password],
-  );
+  const onChangePasswordCheck = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setPasswordCheck(e.target.value);
+  }, []);
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (!mismatchError) {
+      if (email.length === 0) {
+        setErrorMessage('이메일을 입력해 주세요.');
+      } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email)) {
+        setErrorMessage('올바른 이메일 형식을 입력해 주세요');
+      } else if (nickname.length === 0) {
+        setErrorMessage('닉네임을 입력해 주세요.');
+      } else if (nickname.length < 2) {
+        setErrorMessage('2자 이상의 닉네임만 사용 가능 합니다.');
+      } else if (password.length === 0) {
+        setErrorMessage('비밀번호를 입력해 주세요.');
+      } else if (password.length < 8) {
+        setErrorMessage('8자 이상의 비밀번호만 사용 가능 합니다.');
+      } else if (password !== passwordCheck) {
+        setErrorMessage('비밀번호가 일치하지 않습니다.');
+      } else {
         console.log('submit!', email, nickname, password, passwordCheck);
       }
     },
-    [email, nickname, password, passwordCheck, mismatchError],
+    [email, nickname, password, passwordCheck],
   );
 
   return (
@@ -75,7 +81,7 @@ const SignUp = () => {
               onChange={onChangePasswordCheck}
             />
           </div>
-          {mismatchError ? <Error>비밀번호가 일치하지 않습니다.</Error> : null}
+          {errorMessage ? <Error>{errorMessage}</Error> : null}
         </Label>
         <Button type="submit">회원가입</Button>
       </Form>
