@@ -19,7 +19,7 @@ const SignUp = () => {
   const onChangePassword = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(e.target.value);
-      setMismatchError(e.target.value === passwordCheck);
+      setMismatchError(e.target.value !== passwordCheck);
     },
     [passwordCheck],
   );
@@ -27,7 +27,7 @@ const SignUp = () => {
   const onChangePasswordCheck = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setPasswordCheck(e.target.value);
-      setMismatchError(e.target.value === password);
+      setMismatchError(e.target.value !== password);
     },
     [password],
   );
