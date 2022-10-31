@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useInput from '@hooks/useInput';
 import { Button, Form, Header, Input, Label, Error, LinkContainer } from '@pages/SignUp/styles';
 import { Link, useNavigate } from 'react-router-dom';
@@ -34,9 +34,11 @@ const Login = () => {
     [email, password],
   );
 
-  if (data) {
-    navigate('/workspace/channel');
-  }
+  useEffect(() => {
+    if (data) {
+      navigate('/workspace/channel');
+    }
+  }, [data, navigate]);
 
   return (
     <div id="container">

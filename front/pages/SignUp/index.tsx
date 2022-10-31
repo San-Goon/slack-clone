@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, Header, Input, Label, Error, LinkContainer } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
 import axios from 'axios';
@@ -55,9 +55,11 @@ const SignUp = () => {
     [email, nickname, password, passwordCheck],
   );
 
-  if (data) {
-    navigate('/workspace/channel');
-  }
+  useEffect(() => {
+    if (data) {
+      navigate('/workspace/channel');
+    }
+  }, [data, navigate]);
 
   return (
     <div id="container">

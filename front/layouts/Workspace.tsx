@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -18,9 +18,11 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
       });
   }, []);
 
-  if (!data) {
-    navigate('/login');
-  }
+  useEffect(() => {
+    if (!data) {
+      navigate('/login');
+    }
+  }, [data, navigate]);
 
   return (
     <div>
