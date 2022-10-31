@@ -41,19 +41,40 @@ const SignUp = () => {
         <Label id="email-label">
           <span>이메일 주소</span>
           <div>
-            <Input type="email" id="email" name="email" value={email} onChange={onChangeEmail} />
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="example@example.com"
+              value={email}
+              onChange={onChangeEmail}
+            />
           </div>
         </Label>
         <Label id="nickname-label">
           <span>닉네임</span>
           <div>
-            <Input type="nickname" id="nickname" name="nickname" value={nickname} onChange={onChangeNickname} />
+            <Input
+              type="nickname"
+              id="nickname"
+              name="nickname"
+              placeholder="2자 이상 입력해 주세요."
+              value={nickname}
+              onChange={onChangeNickname}
+            />
           </div>
         </Label>
         <Label id="password-label">
           <span>비밀번호</span>
           <div>
-            <Input type="password" id="password" name="password" value={password} onChange={onChangePassword} />
+            <Input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="8자 이상 입력해 주세요."
+              value={password}
+              onChange={onChangePassword}
+            />
           </div>
         </Label>
         <Label id="password-check-label">
@@ -63,6 +84,7 @@ const SignUp = () => {
               type="password"
               id="password-check"
               name="password-check"
+              placeholder="위와 같은 비밀번호를 입력해 주세요."
               value={passwordCheck}
               onChange={onChangePasswordCheck}
             />
