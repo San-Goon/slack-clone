@@ -20,8 +20,8 @@ const Login = () => {
       setErrorMessage('');
       axios
         .post('http://localhost:3095/api/users/login', { email, password }, { withCredentials: true })
-        .then(() => {
-          mutate();
+        .then((response) => {
+          mutate(response.data);
         })
         .catch((error) => {
           if (error.response.status === 401) {

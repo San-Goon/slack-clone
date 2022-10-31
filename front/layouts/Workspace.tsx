@@ -14,7 +14,7 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
         withCredentials: true,
       })
       .then(() => {
-        mutate();
+        mutate(false);
       });
   }, []);
 
