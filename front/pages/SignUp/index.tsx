@@ -1,8 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Form, Header, Input, Label, Error, LinkContainer } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [email, onChangeEmail] = useInput();
   const [nickname, onChangeNickname] = useInput();
   const [password, onChangePassword] = useInput();
@@ -28,7 +31,22 @@ const SignUp = () => {
         setErrorMessage('비밀번호가 일치하지 않습니다.');
       } else {
         setErrorMessage('');
-        console.log('submit!', email, nickname, password, passwordCheck);
+        axios
+          .post('http://localhost:3095/api/users', {
+            email,
+            nickname,
+            password,
+          })
+          .then(() => {
+            navigate('/login?signup=true');
+          })
+          .catch((error) => {
+            if (error.response.status === 403) {
+              setErrorMessage(error.response.data);
+            } else {
+              setErrorMessage('에러가 발생했습니다 잠시후 다시 시도해주세요.');
+            }
+          });
       }
     },
     [email, nickname, password, passwordCheck],
