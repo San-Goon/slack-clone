@@ -1,28 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Form, Header, Input, Label, Error, LinkContainer } from '@pages/SignUp/styles';
+import useInput from '@hooks/useInput';
 
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
+  const [email, onChangeEmail] = useInput();
+  const [nickname, onChangeNickname] = useInput();
+  const [password, onChangePassword] = useInput();
+  const [passwordCheck, onChangePasswordCheck] = useInput();
   const [errorMessage, setErrorMessage] = useState('');
-
-  const onChangeEmail = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  }, []);
-
-  const onChangeNickname = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickname(e.target.value);
-  }, []);
-
-  const onChangePassword = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  }, []);
-
-  const onChangePasswordCheck = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setPasswordCheck(e.target.value);
-  }, []);
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,6 +27,7 @@ const SignUp = () => {
       } else if (password !== passwordCheck) {
         setErrorMessage('비밀번호가 일치하지 않습니다.');
       } else {
+        setErrorMessage('');
         console.log('submit!', email, nickname, password, passwordCheck);
       }
     },
