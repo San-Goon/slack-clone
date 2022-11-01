@@ -57,25 +57,35 @@ const Workspace = ({ children }: PropsType) => {
     setShowCreateWorkspaceModal(true);
   }, []);
 
-  const onCreateWorkspace = useCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!newWorkspace || !newWorkspace.trim()) return;
-    if (!newUrl || !newUrl.trim()) return;
-    if (!newWorkspace) return;
-    axios
-      .post('/api/workspaces', {
-        workspace: newWorkspace,
-        url: newUrl,
-      })
-      .then(() => {
-        mutate();
-        setShowCreateWorkspaceModal(false);
-      })
-      .catch((error) => {
-        console.log(error.response);
-        toast.error(error.response?.data, { position: 'bottom-center' });
-      });
-  }, []);
+  const onCreateWorkspace = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      if (!newWorkspace || !newWorkspace.trim()) return;
+      if (!newUrl || !newUrl.trim()) return;
+      if (!newWorkspace) return;
+      axios
+        .post(
+          'http://localhost:3095/api/workspaces',
+          {
+            workspace: newWorkspace,
+            url: newUrl,
+          },
+          {
+            withCredentials: true,
+          },
+        )
+
+        .then(() => {
+          mutate();
+          setShowCreateWorkspaceModal(false);
+        })
+        .catch((error) => {
+          console.log(error.response);
+          toast.error(error.response?.data, { position: 'bottom-center' });
+        });
+    },
+    [newWorkspace, newUrl],
+  );
 
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
