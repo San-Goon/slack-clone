@@ -1,4 +1,4 @@
-import React, { FC, useCallback, useEffect } from 'react';
+import React, { FC, useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
@@ -7,8 +7,10 @@ import {
   Channels,
   Chats,
   Header,
+  LogOutButton,
   MenuScroll,
   ProfileImg,
+  ProfileModal,
   RightMenu,
   WorkspaceName,
   Workspaces,
@@ -23,6 +25,7 @@ const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const { data, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
+  const [showUserMenu, setShowUserMenu] = useState(false);
   const navigate = useNavigate();
 
   const onClickLogout = useCallback(() => {
@@ -41,19 +44,33 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
     }
   }, [data, navigate]);
 
+  const onClickUserProfile = useCallback(() => {
+    setShowUserMenu((prev) => !prev);
+  }, []);
+
   return (
     <div>
       {data ? (
         <>
           <Header>
             <RightMenu>
-              <span>
+              <span onClick={onClickUserProfile}>
                 <ProfileImg src={gravatar.url(data.email, { s: '28px', d: 'retro' })} alt={data.nickname} />
-                <Menu>프로필메뉴</Menu>
+                {showUserMenu ? (
+                  <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onClickUserProfile}>
+                    <ProfileModal>
+                      <img src={gravatar.url(data.email, { s: '36px', d: 'retro' })} alt={data.nickname} />
+                      <div>
+                        <span id="profile-name">{data.nickname}</span>
+                        <span id="profile-active">Active</span>
+                      </div>
+                    </ProfileModal>
+                    <LogOutButton onClick={onClickLogout}>로그아웃</LogOutButton>
+                  </Menu>
+                ) : null}
               </span>
             </RightMenu>
           </Header>
-          <button onClick={onClickLogout}>로그아웃</button>
           <WorkspaceWrapper>
             <Workspaces>test</Workspaces>
             <MenuScroll>menu scroll</MenuScroll>
