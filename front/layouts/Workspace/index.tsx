@@ -27,6 +27,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import CreateChannelModal from '@components/CreateChannelModal';
 import CreateWorkspaceModal from '@components/CreateWorkspaceModal';
 import { useParams } from 'react-router';
+import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
+import InviteChannelModal from '@components/InviteChannelModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -43,6 +45,8 @@ const Workspace = () => {
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
+  const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
+  const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -60,11 +64,15 @@ const Workspace = () => {
     setShowCreateWorkspaceModal(true);
   }, []);
 
-  const onClickInviteWorkspace = useCallback(() => {}, []);
+  const onClickInviteWorkspace = useCallback(() => {
+    setShowInviteWorkspaceModal(true);
+  }, []);
 
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
     setShowCreateChannelModal(false);
+    setShowInviteWorkspaceModal(false);
+    setShowInviteChannelModal(false);
   }, []);
 
   const onClickUserProfile = useCallback(() => {
@@ -157,6 +165,18 @@ const Workspace = () => {
             mutate={mutateChannel}
             show={showCreateChannelModal}
             setShow={setShowCreateChannelModal}
+            onCloseModal={onCloseModal}
+          />
+          <InviteWorkspaceModal
+            mutate={mutateChannel}
+            show={showInviteWorkspaceModal}
+            setShow={setShowInviteWorkspaceModal}
+            onCloseModal={onCloseModal}
+          />
+          <InviteChannelModal
+            mutate={mutateChannel}
+            show={showInviteChannelModal}
+            setShow={setShowInviteChannelModal}
             onCloseModal={onCloseModal}
           />
         </>
