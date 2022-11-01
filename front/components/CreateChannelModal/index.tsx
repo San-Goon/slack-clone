@@ -19,7 +19,7 @@ interface PropsType {
 const CreateChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) => {
   const [newChannel, onChangeNewChannel] = useInput();
   const { workspace } = useParams();
-  const onCreateChannel = useCallback(
+  const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       axios
@@ -41,12 +41,12 @@ const CreateChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) 
           toast.error(error.response?.data, { position: 'bottom-center' });
         });
     },
-    [newChannel],
+    [workspace, newChannel],
   );
 
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
-      <form onSubmit={onCreateChannel}>
+      <form onSubmit={onSubmit}>
         <Label id="channel-label">
           <span>채널</span>
           <Input id="workspace" value={newChannel} onChange={onChangeNewChannel} />

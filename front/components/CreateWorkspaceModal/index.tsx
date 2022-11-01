@@ -6,6 +6,7 @@ import axios from 'axios';
 import useInput from '@hooks/useInput';
 import { KeyedMutator } from 'swr';
 import { UserType } from '@typings/db';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface PropsType {
   mutate: KeyedMutator<false | UserType>;
@@ -18,7 +19,7 @@ export const CreateWorkspaceModal = ({ mutate, show, setShow, onCloseModal }: Pr
   const [newWorkspace, onChangeNewWorkspace] = useInput();
   const [newUrl, onChangeNewUrl] = useInput();
 
-  const onCreateWorkspace = useCallback(
+  const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       if (!newWorkspace || !newWorkspace.trim()) return;
@@ -48,7 +49,7 @@ export const CreateWorkspaceModal = ({ mutate, show, setShow, onCloseModal }: Pr
   );
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
-      <form onSubmit={onCreateWorkspace}>
+      <form onSubmit={onSubmit}>
         <Label id="workspace-label">
           <span>워크스페이스 이름</span>
           <Input id="workspace" value={newWorkspace} onChange={onChangeNewWorkspace} />
