@@ -4,18 +4,20 @@ import { Button, Input, Label } from '@pages/SignUp/styles';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import useInput from '@hooks/useInput';
-import { KeyedMutator } from 'swr';
+import useSWR from 'swr';
 import { UserType } from '@typings/db';
 import 'react-toastify/dist/ReactToastify.css';
+import fetcher from '@utils/fetcher';
 
 interface PropsType {
-  mutate: KeyedMutator<false | UserType>;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseModal: () => void;
 }
 
-export const CreateWorkspaceModal = ({ mutate, show, setShow, onCloseModal }: PropsType) => {
+export const CreateWorkspaceModal = ({ show, setShow, onCloseModal }: PropsType) => {
+  const { mutate } = useSWR<UserType>('/api/users', fetcher);
+
   const [newWorkspace, onChangeNewWorkspace] = useInput();
   const [newUrl, onChangeNewUrl] = useInput();
 

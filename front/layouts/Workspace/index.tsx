@@ -41,7 +41,7 @@ const Workspace = () => {
 
   const { data: userData, mutate: mutateUser } = useSWR<UserType | false>('/api/users', fetcher);
 
-  const { data: channelData, mutate: mutateChannel } = useSWR<ChannelType[]>(
+  const { data: channelData } = useSWR<ChannelType[]>(
     userData ? `/api/workspaces/${workspace}/channels` : null,
     fetcher,
   );
@@ -146,8 +146,8 @@ const Workspace = () => {
                     <button onClick={onClickLogout}>로그아웃</button>
                   </WorkspaceModal>
                 </Menu>
-                <ChannelList channelData={channelData} />
-                <DMList userData={userData} />
+                <ChannelList />
+                <DMList />
                 {channelData.map((v) => (
                   <div>{v.name}</div>
                 ))}
@@ -161,25 +161,21 @@ const Workspace = () => {
             </Chats>
           </WorkspaceWrapper>
           <CreateWorkspaceModal
-            mutate={mutateUser}
             show={showCreateWorkspaceModal}
             setShow={setShowCreateWorkspaceModal}
             onCloseModal={onCloseModal}
           />
           <CreateChannelModal
-            mutate={mutateChannel}
             show={showCreateChannelModal}
             setShow={setShowCreateChannelModal}
             onCloseModal={onCloseModal}
           />
           <InviteWorkspaceModal
-            mutate={mutateChannel}
             show={showInviteWorkspaceModal}
             setShow={setShowInviteWorkspaceModal}
             onCloseModal={onCloseModal}
           />
           <InviteChannelModal
-            mutate={mutateChannel}
             show={showInviteChannelModal}
             setShow={setShowInviteChannelModal}
             onCloseModal={onCloseModal}

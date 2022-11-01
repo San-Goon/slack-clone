@@ -6,11 +6,8 @@ import fetcher from '@utils/fetcher';
 import { CollapseButton } from '@components/DMList/styles';
 import { NavLink } from 'react-router-dom';
 
-interface PropsType {
-  userData: UserType;
-}
-
-const DMList = ({ userData }: PropsType) => {
+const DMList = () => {
+  const { data: userData } = useSWR<UserType>('/api/users', fetcher);
   const { workspace } = useParams();
   const { data: memberData } = useSWR<UserWithOnlineType[]>(
     userData ? `/api/workspaces/${workspace}/members` : null,

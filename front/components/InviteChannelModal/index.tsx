@@ -4,21 +4,23 @@ import { Button, Input, Label } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
 import axios from 'axios';
 import { useParams } from 'react-router';
-import { KeyedMutator } from 'swr';
+import useSWR from 'swr';
 import { ChannelType } from '@typings/db';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import fetcher from '@utils/fetcher';
 
 interface PropsType {
-  mutate: KeyedMutator<ChannelType[]>;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseModal: () => void;
 }
 
-const InviteChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) => {
-  const [newMember, onChangeNewMember] = useInput();
+const InviteChannelModal = ({ show, setShow, onCloseModal }: PropsType) => {
   const { workspace, channel } = useParams();
+  const { mutate } = useSWR<ChannelType[]>(`/api/workspaces/${workspace}/channels`, fetcher);
+
+  const [newMember, onChangeNewMember] = useInput();
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();

@@ -4,21 +4,23 @@ import { toast, ToastContainer } from 'react-toastify';
 import useInput from '@hooks/useInput';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from '@components/Modal';
-import { KeyedMutator } from 'swr';
+import useSWR from 'swr';
 import { ChannelType } from '@typings/db';
 import axios from 'axios';
 import { useParams } from 'react-router';
+import fetcher from '@utils/fetcher';
 
 interface PropsType {
-  mutate: KeyedMutator<ChannelType[]>;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseModal: () => void;
 }
 
-const CreateChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) => {
-  const [newChannel, onChangeNewChannel] = useInput();
+const CreateChannelModal = ({ show, setShow, onCloseModal }: PropsType) => {
   const { workspace } = useParams();
+  const { mutate } = useSWR<ChannelType[]>(`/api/workspaces/${workspace}/channels`, fetcher);
+
+  const [newChannel, onChangeNewChannel] = useInput();
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();

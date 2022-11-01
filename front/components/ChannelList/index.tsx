@@ -1,15 +1,15 @@
 import React, { useCallback, useState } from 'react';
-import { ChannelType } from '@typings/db';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { CollapseButton } from '@components/DMList/styles';
+import useSWR from 'swr';
+import { ChannelType } from '@typings/db';
+import fetcher from '@utils/fetcher';
 
-interface PropsType {
-  channelData: ChannelType[];
-}
-
-const ChannelList = ({ channelData }: PropsType) => {
+const ChannelList = () => {
   const { workspace } = useParams();
+  const { data: channelData } = useSWR<ChannelType[]>(`/api/workspaces/${workspace}/channels`, fetcher);
+
   const [channelCollapse, setChannelCollapse] = useState(false);
 
   const toggleChannelCollapse = useCallback(() => {
