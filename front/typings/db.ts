@@ -2,7 +2,7 @@ export interface UserType {
   id: number;
   nickname: string;
   email: string;
-  workspaces: WorkspaceType[];
+  Workspaces: WorkspaceType[];
 }
 
 export interface WorkspaceType {
