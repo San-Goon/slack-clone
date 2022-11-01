@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import Modal from '@components/Modal';
 import { KeyedMutator } from 'swr';
 import { UserType } from '@typings/db';
+import axios from 'axios';
+import { useParams } from 'react-router';
 
 interface PropsType {
   mutate: KeyedMutator<false | UserType>;
@@ -16,7 +18,27 @@ interface PropsType {
 
 const CreateChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) => {
   const [newChannel, onChangeNewChannel] = useInput();
-  const onCreateChannel = useCallback(() => {}, []);
+  const { workspace } = useParams();
+  const onCreateChannel = useCallback(() => {
+    axios
+      .post(
+        `http://localhost:3095/api/workspaces/${workspace}/channels`,
+        {
+          name: newChannel,
+        },
+        {
+          withCredentials: true,
+        },
+      )
+      .then(() => {
+        mutate();
+        setShow(false);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        toast.error(error.response?.data, { position: 'bottom-center' });
+      });
+  }, [newChannel]);
 
   return (
     <Modal show={show} onCloseModal={onCloseModal}>
