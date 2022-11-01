@@ -2,9 +2,23 @@ import React, { FC, useCallback, useEffect } from 'react';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import { Header, ProfileImg, RightMenu } from '@layouts/Workspace/styles';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import {
+  Channels,
+  Chats,
+  Header,
+  MenuScroll,
+  ProfileImg,
+  RightMenu,
+  WorkspaceName,
+  Workspaces,
+  WorkspaceWrapper,
+} from '@layouts/Workspace/styles';
 import gravatar from 'gravatar';
+import loadable from '@loadable/component';
+
+const Channel = loadable(() => import('@pages/Channel'));
+const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const { data, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
@@ -36,6 +50,19 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
         </RightMenu>
       </Header>
       <button onClick={onClickLogout}>로그아웃</button>
+      <WorkspaceWrapper>
+        <Workspaces>test</Workspaces>
+        <MenuScroll>menu scroll</MenuScroll>
+        <Channels>
+          <WorkspaceName>Slack</WorkspaceName>
+        </Channels>
+        <Chats>
+          <Routes>
+            <Route path="/workspace/channel" element={<Channel />} />
+            <Route path="/workspace/dm" element={<DirectMessage />} />
+          </Routes>
+        </Chats>
+      </WorkspaceWrapper>
       {children}
     </div>
   );
