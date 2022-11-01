@@ -8,7 +8,7 @@ import { KeyedMutator } from 'swr';
 import { UserType } from '@typings/db';
 
 interface PropsType {
-  mutate:  KeyedMutator<false | UserType>;
+  mutate: KeyedMutator<false | UserType>;
   show: boolean;
   setShow: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseModal: () => void;
