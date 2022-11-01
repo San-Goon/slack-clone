@@ -11,3 +11,10 @@ export interface WorkspaceType {
   url: string;
   ownerId: number;
 }
+
+export interface ChannelType {
+  id: number;
+  name: string;
+  private: boolean;
+  WorkspaceId: number;
+}

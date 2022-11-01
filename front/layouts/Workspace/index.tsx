@@ -22,16 +22,23 @@ import {
 import gravatar from 'gravatar';
 import loadable from '@loadable/component';
 import Menu from '@components/Menu';
-import { UserType } from '@typings/db';
+import { ChannelType, UserType } from '@typings/db';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateChannelModal from '@components/CreateChannelModal';
 import CreateWorkspaceModal from '@components/CreateWorkspaceModal';
+import { useParams } from 'react-router';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace = () => {
-  const { data: userData, mutate } = useSWR<UserType | false>('http://localhost:3095/api/users', fetcher);
+  const { workspace } = useParams();
+
+  const { data: userData, mutate: mutateUser } = useSWR<UserType | false>('http://localhost:3095/api/users', fetcher);
+  const { data: channelData, mutate: mutateChannel } = useSWR<ChannelType[]>(
+    userData ? `http://localhost:3095/workspace/${workspace}/channels` : null,
+    fetcher,
+  );
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
@@ -45,7 +52,7 @@ const Workspace = () => {
         withCredentials: true,
       })
       .then(() => {
-        mutate(false);
+        mutateUser(false);
       });
   }, []);
 
@@ -128,6 +135,9 @@ const Workspace = () => {
                     <button onClick={onClickLogout}>로그아웃</button>
                   </WorkspaceModal>
                 </Menu>
+                {channelData?.map((v) => (
+                  <div>{v.name}</div>
+                ))}
               </MenuScroll>
             </Channels>
             <Chats>
@@ -138,13 +148,13 @@ const Workspace = () => {
             </Chats>
           </WorkspaceWrapper>
           <CreateWorkspaceModal
-            mutate={mutate}
+            mutate={mutateUser}
             show={showCreateWorkspaceModal}
             setShow={setShowCreateWorkspaceModal}
             onCloseModal={onCloseModal}
           />
           <CreateChannelModal
-            mutate={mutate}
+            mutate={mutateChannel}
             show={showCreateChannelModal}
             setShow={setShowCreateChannelModal}
             onCloseModal={onCloseModal}
