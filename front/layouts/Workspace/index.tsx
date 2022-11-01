@@ -35,20 +35,20 @@ const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 const Workspace = () => {
   const { workspace } = useParams();
-
+  const navigate = useNavigate();
   const { data: userData, mutate: mutateUser } = useSWR<UserType | false>('http://localhost:3095/api/users', fetcher);
+
   const { data: channelData, mutate: mutateChannel } = useSWR<ChannelType[]>(
-    userData ? `http://localhost:3095/workspace/${workspace}/channels` : null,
+    userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null,
     fetcher,
   );
+
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [showInviteWorkspaceModal, setShowInviteWorkspaceModal] = useState(false);
   const [showInviteChannelModal, setShowInviteChannelModal] = useState(false);
-
-  const navigate = useNavigate();
 
   const onClickLogout = useCallback(() => {
     axios
@@ -100,7 +100,7 @@ const Workspace = () => {
 
   return (
     <div>
-      {userData ? (
+      {userData && channelData ? (
         <>
           <Header>
             <RightMenu>
@@ -143,15 +143,15 @@ const Workspace = () => {
                     <button onClick={onClickLogout}>로그아웃</button>
                   </WorkspaceModal>
                 </Menu>
-                {channelData?.map((v) => (
+                {channelData.map((v) => (
                   <div>{v.name}</div>
                 ))}
               </MenuScroll>
             </Channels>
             <Chats>
               <Routes>
-                <Route path="/workspace/:workspace/channel/:channel" element={<Channel />} />
-                <Route path="/workspace/:workspace/dm/:id" element={<DirectMessage />} />
+                <Route path="/channel/:channel" element={<Channel />} />
+                <Route path="/dm/:id" element={<DirectMessage />} />
               </Routes>
             </Chats>
           </WorkspaceWrapper>
