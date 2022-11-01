@@ -1,9 +1,10 @@
-import React, { FC, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import {
+  AddButton,
   Channels,
   Chats,
   Header,
@@ -12,6 +13,7 @@ import {
   ProfileImg,
   ProfileModal,
   RightMenu,
+  WorkspaceButton,
   WorkspaceName,
   Workspaces,
   WorkspaceWrapper,
@@ -19,13 +21,25 @@ import {
 import gravatar from 'gravatar';
 import loadable from '@loadable/component';
 import Menu from '@components/Menu';
+import { UserType } from '@typings/db';
+import Modal from '@components/Modal';
+import { Button, Input, Label } from '@pages/SignUp/styles';
+import useInput from '@hooks/useInput';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
-const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
-  const { data, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
+interface PropsType {
+  children?: React.ReactNode;
+}
+
+const Workspace = ({ children }: PropsType) => {
+  const { data: userData, mutate } = useSWR<UserType | false>('http://localhost:3095/api/users', fetcher);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
+  const [newWorkspace, onChangeNewWorkspace] = useInput();
+  const [newUrl, onChangeNewUrl] = useInput();
+
   const navigate = useNavigate();
 
   const onClickLogout = useCallback(() => {
@@ -38,11 +52,19 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
       });
   }, []);
 
+  const onClickCreateWorkspace = useCallback(() => {
+    setShowCreateWorkspaceModal(true);
+  }, []);
+
+  const onCreateWorkspace = useCallback(() => {}, []);
+
+  const onCloseModal = useCallback(() => {}, []);
+
   useEffect(() => {
-    if (!data) {
+    if (!userData) {
       navigate('/login');
     }
-  }, [data, navigate]);
+  }, [userData, navigate]);
 
   const onClickUserProfile = useCallback(() => {
     setShowUserMenu((prev) => !prev);
@@ -50,18 +72,18 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
 
   return (
     <div>
-      {data ? (
+      {userData ? (
         <>
           <Header>
             <RightMenu>
               <span onClick={onClickUserProfile}>
-                <ProfileImg src={gravatar.url(data.email, { s: '28px', d: 'retro' })} alt={data.nickname} />
+                <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt={userData.nickname} />
                 {showUserMenu ? (
                   <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onClickUserProfile}>
                     <ProfileModal>
-                      <img src={gravatar.url(data.email, { s: '36px', d: 'retro' })} alt={data.nickname} />
+                      <img src={gravatar.url(userData.email, { s: '36px', d: 'retro' })} alt={userData.nickname} />
                       <div>
-                        <span id="profile-name">{data.nickname}</span>
+                        <span id="profile-name">{userData.nickname}</span>
                         <span id="profile-active">Active</span>
                       </div>
                     </ProfileModal>
@@ -72,10 +94,19 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
             </RightMenu>
           </Header>
           <WorkspaceWrapper>
-            <Workspaces>test</Workspaces>
-            <MenuScroll>menu scroll</MenuScroll>
+            <Workspaces>
+              {userData.Workspaces.map((workspace) => {
+                return (
+                  <Link key={workspace.id} to={`/workspace/${123}/channel/일반`}>
+                    <WorkspaceButton>{workspace.name.slice(0, 1).toUpperCase()}</WorkspaceButton>
+                  </Link>
+                );
+              })}
+              <AddButton onClick={onClickCreateWorkspace}>+</AddButton>
+            </Workspaces>
             <Channels>
               <WorkspaceName>Slack</WorkspaceName>
+              <MenuScroll>menu scroll</MenuScroll>
             </Channels>
             <Chats>
               <Routes>
@@ -84,9 +115,21 @@ const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
               </Routes>
             </Chats>
           </WorkspaceWrapper>
+          <Modal show={showCreateWorkspaceModal} onCloseModal={onCloseModal}>
+            <form onSubmit={onCreateWorkspace}>
+              <Label id="workspace-label">
+                <span>워크스페이스 이름</span>
+                <Input id="workspace" value={newWorkspace} onChange={onChangeNewWorkspace} />
+              </Label>
+              <Label id="workspace-url-label">
+                <span>워크스페이스 url</span>
+                <Input id="workspace" value={newUrl} onChange={onChangeNewUrl} />
+              </Label>
+              <Button type="submit">생성하기</Button>
+            </form>
+          </Modal>
         </>
       ) : null}
-      {children}
     </div>
   );
 };
