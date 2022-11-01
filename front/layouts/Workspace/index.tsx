@@ -25,7 +25,8 @@ import { UserType } from '@typings/db';
 import Modal from '@components/Modal';
 import { Button, Input, Label } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -163,6 +164,7 @@ const Workspace = ({ children }: PropsType) => {
               </Label>
               <Button type="submit">생성하기</Button>
             </form>
+            <ToastContainer />
           </Modal>
         </>
       ) : null}
