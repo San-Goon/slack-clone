@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { DMType, UserType, UserWithOnlineType } from '@typings/db';
+import { UserType, UserWithOnlineType } from '@typings/db';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
@@ -16,12 +16,12 @@ const DMList = ({ userData }: PropsType) => {
     userData ? `/api/workspaces/${workspace}/members` : null,
     fetcher,
   );
-  const [channelCollapse, setChannelCollapse] = useState(false);
+  const [DMCollapse, setDMCollapse] = useState(false);
   const [countList, setCountList] = useState<{ [key: string]: number }>({});
   const [onlineList, setOnlineList] = useState<number[]>([]);
 
-  const toggleChannelCollapse = useCallback(() => {
-    setChannelCollapse((prev) => !prev);
+  const toggleDMCollapse = useCallback(() => {
+    setDMCollapse((prev) => !prev);
   }, []);
 
   const resetCount = useCallback(
@@ -36,15 +36,6 @@ const DMList = ({ userData }: PropsType) => {
     [],
   );
 
-  const onMessage = (data: DMType) => {
-    setCountList((list) => {
-      return {
-        ...list,
-        [data.SenderId]: list[data.SenderId] ? list[data.SenderId] + 1 : 1,
-      };
-    });
-  };
-
   useEffect(() => {
     setOnlineList([]);
     setCountList({});
@@ -53,13 +44,13 @@ const DMList = ({ userData }: PropsType) => {
   return (
     <>
       <h2>
-        <CollapseButton collapse={channelCollapse} onClick={toggleChannelCollapse}>
+        <CollapseButton collapse={DMCollapse} onClick={toggleDMCollapse}>
           <i />
         </CollapseButton>
         <span>Direct Messages</span>
       </h2>
       <div>
-        {channelCollapse
+        {DMCollapse
           ? null
           : memberData?.map((member) => {
               const isOnline = onlineList.includes(member.id);
@@ -68,10 +59,19 @@ const DMList = ({ userData }: PropsType) => {
                 <NavLink
                   key={member.id}
                   className={({ isActive }) => (isActive ? 'selected' : undefined)}
-                  to={`/workspaces/${workspace}/dm/${member.id}`}
+                  to={`/workspace/${workspace}/dm/${member.id}`}
                   onClick={resetCount(member.id)}
                 >
-                  <i />
+                  <i
+                    className={`c-icon p-channel_sidebar__presence_icon p-channel_sidebar__presence_icon--dim_enabled c-presence ${
+                      isOnline ? 'c-presence--active c-icon--presence-online' : 'c-icon--presence-offline'
+                    }`}
+                    aria-hidden="true"
+                    data-qa="presence_indicator"
+                    data-qa-presence-self="false"
+                    data-qa-presence-active="false"
+                    data-qa-presence-dnd="false"
+                  />
                   <span className={count > 0 ? 'bold' : undefined}>{member.nickname}</span>
                   {member.id === userData?.id ? <span> (나)</span> : null}
                   {count > 0 ? <span className="count">{count}</span> : null}
