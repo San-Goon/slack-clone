@@ -6,7 +6,7 @@ const LogIn = loadable(() => import('@pages/Login'));
 const SignUp = loadable(() => import('@pages/SignUp'));
 const Channel = loadable(() => import('@pages/Channel'));
 
-const Index = () => {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<LogIn />} />
@@ -17,4 +17,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default App;

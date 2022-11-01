@@ -4,7 +4,7 @@ import fetcher from '@utils/fetcher';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Index: FC<React.PropsWithChildren<{}>> = ({ children }) => {
+const Workspace: FC<React.PropsWithChildren<{}>> = ({ children }) => {
   const { data, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
   const navigate = useNavigate();
 
@@ -32,4 +32,4 @@ const Index: FC<React.PropsWithChildren<{}>> = ({ children }) => {
   );
 };
 
-export default Index;
+export default Workspace;
