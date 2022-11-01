@@ -56,7 +56,24 @@ const Workspace = ({ children }: PropsType) => {
     setShowCreateWorkspaceModal(true);
   }, []);
 
-  const onCreateWorkspace = useCallback(() => {}, []);
+  const onCreateWorkspace = useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!newWorkspace || !newWorkspace.trim()) return;
+    if (!newUrl || !newUrl.trim()) return;
+    if (!newWorkspace) return;
+    axios
+      .post('/api/workspaces', {
+        workspace: newWorkspace,
+        url: newUrl,
+      })
+      .then(() => {
+        mutate();
+        setShowCreateWorkspaceModal(false);
+      })
+      .catch((error) => {
+        console.dir(error);
+      });
+  }, []);
 
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
