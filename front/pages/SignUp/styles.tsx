@@ -86,11 +86,6 @@ export const Error = styled.div`
   font-weight: bold;
 `;
 
-export const Success = styled.div`
-  color: #2eb67d;
-  font-weight: bold;
-`;
-
 export const LinkContainer = styled.p`
   font-size: 13px;
   color: #616061;
