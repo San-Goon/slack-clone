@@ -5,6 +5,10 @@ export interface UserType {
   Workspaces: WorkspaceType[];
 }
 
+export interface UserWithOnlineType extends UserType {
+  online: boolean;
+}
+
 export interface WorkspaceType {
   id: number;
   name: string;
@@ -17,4 +21,14 @@ export interface ChannelType {
   name: string;
   private: boolean;
   WorkspaceId: number;
+}
+
+export interface DMType {
+  id: number;
+  SenderId: number;
+  Sender: UserType;
+  ReceiverId: number;
+  Receiver: UserType;
+  content: string;
+  createdAt: Date;
 }
