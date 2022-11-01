@@ -18,11 +18,7 @@ const SignUp = () => {
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (email.length === 0) {
-        setErrorMessage('이메일을 입력해 주세요.');
-      } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email)) {
-        setErrorMessage('올바른 이메일 형식을 입력해 주세요');
-      } else if (nickname.length === 0) {
+      if (nickname.length === 0) {
         setErrorMessage('닉네임을 입력해 주세요.');
       } else if (nickname.length < 2) {
         setErrorMessage('2자 이상의 닉네임만 사용 가능 합니다.');
