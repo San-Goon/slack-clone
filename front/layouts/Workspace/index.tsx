@@ -29,22 +29,17 @@ import useInput from '@hooks/useInput';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CreateChannelModal from '@components/CreateChannelModal';
+import CreateWorkspaceModal from '@components/CreateWorkspaceModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
-interface PropsType {
-  children?: React.ReactNode;
-}
-
-const Workspace = ({ children }: PropsType) => {
+const Workspace = () => {
   const { data: userData, mutate } = useSWR<UserType | false>('http://localhost:3095/api/users', fetcher);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
   const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
   const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
-  const [newWorkspace, onChangeNewWorkspace] = useInput();
-  const [newUrl, onChangeNewUrl] = useInput();
 
   const navigate = useNavigate();
 
@@ -63,36 +58,6 @@ const Workspace = ({ children }: PropsType) => {
   }, []);
 
   const onClickInviteWorkspace = useCallback(() => {}, []);
-
-  const onCreateWorkspace = useCallback(
-    (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      if (!newWorkspace || !newWorkspace.trim()) return;
-      if (!newUrl || !newUrl.trim()) return;
-      if (!newWorkspace) return;
-      axios
-        .post(
-          'http://localhost:3095/api/workspaces',
-          {
-            workspace: newWorkspace,
-            url: newUrl,
-          },
-          {
-            withCredentials: true,
-          },
-        )
-
-        .then(() => {
-          mutate();
-          setShowCreateWorkspaceModal(false);
-        })
-        .catch((error) => {
-          console.log(error.response);
-          toast.error(error.response?.data, { position: 'bottom-center' });
-        });
-    },
-    [newWorkspace, newUrl],
-  );
 
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
@@ -176,21 +141,18 @@ const Workspace = ({ children }: PropsType) => {
               </Routes>
             </Chats>
           </WorkspaceWrapper>
-          <Modal show={showCreateWorkspaceModal} onCloseModal={onCloseModal}>
-            <form onSubmit={onCreateWorkspace}>
-              <Label id="workspace-label">
-                <span>워크스페이스 이름</span>
-                <Input id="workspace" value={newWorkspace} onChange={onChangeNewWorkspace} />
-              </Label>
-              <Label id="workspace-url-label">
-                <span>워크스페이스 url</span>
-                <Input id="workspace" value={newUrl} onChange={onChangeNewUrl} />
-              </Label>
-              <Button type="submit">생성하기</Button>
-            </form>
-            <ToastContainer />
-          </Modal>
-          <CreateChannelModal show={showCreateChannelModal} onCloseModal={onCloseModal} />
+          <CreateWorkspaceModal
+            mutate={mutate}
+            show={showCreateWorkspaceModal}
+            setShow={setShowCreateWorkspaceModal}
+            onCloseModal={onCloseModal}
+          />
+          <CreateChannelModal
+            mutate={mutate}
+            show={showCreateChannelModal}
+            setShow={setShowCreateChannelModal}
+            onCloseModal={onCloseModal}
+          />
         </>
       ) : null}
     </div>

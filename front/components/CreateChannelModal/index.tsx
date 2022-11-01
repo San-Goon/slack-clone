@@ -4,13 +4,17 @@ import { toast, ToastContainer } from 'react-toastify';
 import useInput from '@hooks/useInput';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from '@components/Modal';
+import { KeyedMutator } from 'swr';
+import { UserType } from '@typings/db';
 
 interface PropsType {
+  mutate:  KeyedMutator<false | UserType>;
   show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
   onCloseModal: () => void;
 }
 
-const CreateChannelModal = ({ show, onCloseModal }: PropsType) => {
+const CreateChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) => {
   const [newChannel, onChangeNewChannel] = useInput();
   const onCreateChannel = useCallback(() => {}, []);
 
