@@ -27,7 +27,7 @@ export const CreateWorkspaceModal = ({ mutate, show, setShow, onCloseModal }: Pr
       if (!newWorkspace) return;
       axios
         .post(
-          'http://localhost:3095/api/workspaces',
+          '/api/workspaces',
           {
             workspace: newWorkspace,
             url: newUrl,

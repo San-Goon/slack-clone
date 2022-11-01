@@ -7,7 +7,7 @@ import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 
 const Login = () => {
-  const { data, mutate } = useSWR('http://localhost:3095/api/users', fetcher);
+  const { data, mutate } = useSWR('/api/users', fetcher);
   const navigate = useNavigate();
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -19,7 +19,7 @@ const Login = () => {
       e.preventDefault();
       setErrorMessage('');
       axios
-        .post('http://localhost:3095/api/users/login', { email, password }, { withCredentials: true })
+        .post('/api/users/login', { email, password }, { withCredentials: true })
         .then((response) => {
           mutate(response.data);
         })

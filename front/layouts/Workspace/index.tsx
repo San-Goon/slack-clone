@@ -36,10 +36,11 @@ const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 const Workspace = () => {
   const { workspace } = useParams();
   const navigate = useNavigate();
-  const { data: userData, mutate: mutateUser } = useSWR<UserType | false>('http://localhost:3095/api/users', fetcher);
+
+  const { data: userData, mutate: mutateUser } = useSWR<UserType | false>('/api/users', fetcher);
 
   const { data: channelData, mutate: mutateChannel } = useSWR<ChannelType[]>(
-    userData ? `http://localhost:3095/api/workspaces/${workspace}/channels` : null,
+    userData ? `/api/workspaces/${workspace}/channels` : null,
     fetcher,
   );
 
@@ -52,7 +53,7 @@ const Workspace = () => {
 
   const onClickLogout = useCallback(() => {
     axios
-      .post('http://localhost:3095/api/users/logout', null, {
+      .post('/api/users/logout', null, {
         withCredentials: true,
       })
       .then(() => {

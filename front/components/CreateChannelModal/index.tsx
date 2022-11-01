@@ -24,7 +24,7 @@ const CreateChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) 
       e.preventDefault();
       axios
         .post(
-          `http://localhost:3095/api/workspaces/${workspace}/channels`,
+          `/api/workspaces/${workspace}/channels`,
           {
             name: newChannel,
           },

@@ -24,7 +24,7 @@ const InviteChannelModal = ({ mutate, show, setShow, onCloseModal }: PropsType) 
       e.preventDefault();
       if (!newMember || !newMember.trim()) return;
       axios
-        .post(`http://localhost:3095/api/workspaces/${workspace}/channels/${channel}/members`, {
+        .post(`/api/workspaces/${workspace}/channels/${channel}/members`, {
           email: newMember,
         })
         .then(() => {

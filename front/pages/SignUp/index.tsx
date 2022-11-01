@@ -7,7 +7,7 @@ import fetcher from '@utils/fetcher';
 import useSWR from 'swr';
 
 const SignUp = () => {
-  const { data } = useSWR('http://localhost:3095/api/users', fetcher);
+  const { data } = useSWR('/api/users', fetcher);
   const navigate = useNavigate();
   const [email, onChangeEmail] = useInput();
   const [nickname, onChangeNickname] = useInput();
@@ -31,7 +31,7 @@ const SignUp = () => {
       } else {
         setErrorMessage('');
         axios
-          .post('http://localhost:3095/api/users', {
+          .post('/api/users', {
             email,
             nickname,
             password,

@@ -24,7 +24,7 @@ const InviteWorkspaceModal = ({ mutate, show, setShow, onCloseModal }: PropsType
       e.preventDefault();
       if (!newMember || !newMember.trim()) return;
       axios
-        .post(`http://localhost:3095/api/workspaces/${workspace}/members`, {
+        .post(`/api/workspaces/${workspace}/members`, {
           email: newMember,
         })
         .then(() => {
