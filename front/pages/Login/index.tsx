@@ -36,7 +36,7 @@ const Login = () => {
 
   useEffect(() => {
     if (data) {
-      navigate('/workspace/channel');
+      navigate('/workspace/slack/channel/일반');
     }
   }, [data, navigate]);
 
