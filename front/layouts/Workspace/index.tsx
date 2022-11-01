@@ -58,17 +58,24 @@ const Workspace = ({ children }: PropsType) => {
 
   const onCreateWorkspace = useCallback(() => {}, []);
 
-  const onCloseModal = useCallback(() => {}, []);
+  const onCloseModal = useCallback(() => {
+    setShowCreateWorkspaceModal(false);
+  }, []);
+
+  const onClickUserProfile = useCallback(() => {
+    setShowUserMenu((prev) => !prev);
+  }, []);
+
+  const onCloseUserProfile = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    e.stopPropagation();
+    setShowUserMenu(false);
+  }, []);
 
   useEffect(() => {
     if (!userData) {
       navigate('/login');
     }
   }, [userData, navigate]);
-
-  const onClickUserProfile = useCallback(() => {
-    setShowUserMenu((prev) => !prev);
-  }, []);
 
   return (
     <div>
@@ -79,7 +86,7 @@ const Workspace = ({ children }: PropsType) => {
               <span onClick={onClickUserProfile}>
                 <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt={userData.nickname} />
                 {showUserMenu ? (
-                  <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onClickUserProfile}>
+                  <Menu style={{ right: 0, top: 38 }} show={showUserMenu} onCloseModal={onCloseUserProfile}>
                     <ProfileModal>
                       <img src={gravatar.url(userData.email, { s: '36px', d: 'retro' })} alt={userData.nickname} />
                       <div>
