@@ -14,6 +14,7 @@ import {
   ProfileModal,
   RightMenu,
   WorkspaceButton,
+  WorkspaceModal,
   WorkspaceName,
   Workspaces,
   WorkspaceWrapper,
@@ -27,6 +28,7 @@ import { Button, Input, Label } from '@pages/SignUp/styles';
 import useInput from '@hooks/useInput';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CreateChannelModal from '@components/CreateChannelModal';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
@@ -39,6 +41,8 @@ const Workspace = ({ children }: PropsType) => {
   const { data: userData, mutate } = useSWR<UserType | false>('http://localhost:3095/api/users', fetcher);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] = useState(false);
+  const [showWorkspaceModal, setShowWorkspaceModal] = useState(false);
+  const [showCreateChannelModal, setShowCreateChannelModal] = useState(false);
   const [newWorkspace, onChangeNewWorkspace] = useInput();
   const [newUrl, onChangeNewUrl] = useInput();
 
@@ -57,6 +61,8 @@ const Workspace = ({ children }: PropsType) => {
   const onClickCreateWorkspace = useCallback(() => {
     setShowCreateWorkspaceModal(true);
   }, []);
+
+  const onClickInviteWorkspace = useCallback(() => {}, []);
 
   const onCreateWorkspace = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -90,6 +96,7 @@ const Workspace = ({ children }: PropsType) => {
 
   const onCloseModal = useCallback(() => {
     setShowCreateWorkspaceModal(false);
+    setShowCreateChannelModal(false);
   }, []);
 
   const onClickUserProfile = useCallback(() => {
@@ -99,6 +106,14 @@ const Workspace = ({ children }: PropsType) => {
   const onCloseUserProfile = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
     setShowUserMenu(false);
+  }, []);
+
+  const toggleWorkspaceModal = useCallback(() => {
+    setShowWorkspaceModal((prev) => !prev);
+  }, []);
+
+  const onClickAddChannel = useCallback(() => {
+    setShowCreateChannelModal(true);
   }, []);
 
   useEffect(() => {
@@ -142,8 +157,17 @@ const Workspace = ({ children }: PropsType) => {
               <AddButton onClick={onClickCreateWorkspace}>+</AddButton>
             </Workspaces>
             <Channels>
-              <WorkspaceName>Slack</WorkspaceName>
-              <MenuScroll>menu scroll</MenuScroll>
+              <WorkspaceName onClick={toggleWorkspaceModal}>Slack</WorkspaceName>
+              <MenuScroll>
+                <Menu show={showWorkspaceModal} onCloseModal={toggleWorkspaceModal} style={{ top: 95, left: 80 }}>
+                  <WorkspaceModal>
+                    <h2>Slack</h2>
+                    <button onClick={onClickInviteWorkspace}>워크스페이스 사용자 초대</button>
+                    <button onClick={onClickAddChannel}>채널 만들기</button>
+                    <button onClick={onClickLogout}>로그아웃</button>
+                  </WorkspaceModal>
+                </Menu>
+              </MenuScroll>
             </Channels>
             <Chats>
               <Routes>
@@ -166,6 +190,7 @@ const Workspace = ({ children }: PropsType) => {
             </form>
             <ToastContainer />
           </Modal>
+          <CreateChannelModal show={showCreateChannelModal} onCloseModal={onCloseModal} />
         </>
       ) : null}
     </div>
