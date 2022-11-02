@@ -14,15 +14,13 @@ const useSocket = (workspace?: string): [Socket | undefined, () => void] => {
   }, [workspace]);
 
   if (!workspace) return [undefined, disconnect];
-  // socket.io 를 쓸수 있게하는 함수.
-  sockets[workspace] = io(`${backUrl}/ws-${workspace}`);
-  // 서버쪽에 이벤트 이름으로 데이터를 보냄 emit으로 보낸다
-  sockets[workspace].emit('hello', 'world');
-  // 서버쪽에서 프론트로 message라는 이벤트 명으로 데이터를 보내면 리스너로 받는다. on으로 받음
-  sockets[workspace].on('message', (data) => {
-    console.log(data);
-  });
 
+  // socket.io 를 쓸수 있게하는 함수. 재연결 방지를 위해 이프문에 삽입
+  if (!sockets[workspace]) {
+    sockets[workspace] = io(`${backUrl}/ws-${workspace}`, {
+      transports: ['websocket'],
+    });
+  }
   return [sockets[workspace], disconnect];
 };
 
