@@ -148,9 +148,6 @@ const Workspace = () => {
                 </Menu>
                 <ChannelList />
                 <DMList />
-                {channelData.map((v) => (
-                  <div>{v.name}</div>
-                ))}
               </MenuScroll>
             </Channels>
             <Chats>
