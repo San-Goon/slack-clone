@@ -16,14 +16,17 @@ const ChatBox = ({ chat, onSubmit, onChangeChat, placeholder }: PropsType) => {
       autosize(textareaRef.current);
     }
   }, [textareaRef]);
-  const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'enter') {
-      if (!e.shiftKey) {
-        e.preventDefault();
-        onSubmit(e);
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === 'Enter') {
+        if (!e.shiftKey) {
+          e.preventDefault();
+          onSubmit(e);
+        }
       }
-    }
-  }, []);
+    },
+    [onSubmit],
+  );
 
   return (
     <ChatArea>
