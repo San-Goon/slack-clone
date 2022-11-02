@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Modal from '@components/Modal';
 import useSWR from 'swr';
 import { ChannelType } from '@typings/db';
-import axios from 'axios';
+import axios from '@utils/axios';
 import { useParams } from 'react-router';
 import fetcher from '@utils/fetcher';
 

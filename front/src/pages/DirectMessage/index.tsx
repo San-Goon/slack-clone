@@ -7,7 +7,7 @@ import fetcher from '@utils/fetcher';
 import ChatBox from '@components/ChatBox';
 import ChatList from '@components/ChatList';
 import useInput from '@hooks/useInput';
-import axios from 'axios';
+import axios from '@utils/axios';
 import { DMType } from '@typings/db';
 
 const DirectMessage = () => {

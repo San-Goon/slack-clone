@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
-import axios from 'axios';
+import axios from '@utils/axios';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import {
   AddButton,

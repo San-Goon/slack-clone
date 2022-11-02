@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import Modal from '@components/Modal';
 import { Button, Input, Label } from '@pages/SignUp/styles';
 import { toast, ToastContainer } from 'react-toastify';
-import axios from 'axios';
+import axios from '@utils/axios';
 import useInput from '@hooks/useInput';
 import useSWR from 'swr';
 import { UserType } from '@typings/db';
