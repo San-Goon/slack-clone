@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 const backUrl = 'http://localhost:3095';
 
 const sockets: { [key: string]: Socket } = {};
-const useSocket = (workspace?: string) => {
+const useSocket = (workspace?: string): [Socket | undefined, () => void] => {
   // 연결을 끊는 함수. 끊지않으면 워크스페이스가 변경되어도 계속 메세지를 받게됨.
   const disconnect = useCallback(() => {
     if (workspace) {
