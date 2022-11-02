@@ -81,7 +81,7 @@ const config: Configuration = {
     hot: true,
     proxy: {
       '/api/': {
-        target: 'http://localhost:3095',
+        target: 'https://sleact.nodebird.com',
         changeOrigin: true,
       },
     },
@@ -91,7 +91,7 @@ const config: Configuration = {
 if (isDevelopment && config.plugins) {
   config.plugins.push(new webpack.HotModuleReplacementPlugin());
   config.plugins.push(new ReactRefreshWebpackPlugin());
-  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: true }));
+  config.plugins.push(new BundleAnalyzerPlugin({ analyzerMode: 'server', openAnalyzer: false }));
 }
 
 if (!isDevelopment && config.plugins) {
