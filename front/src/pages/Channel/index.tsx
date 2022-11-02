@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import { Container, Header } from './styles';
-import ChatList from '../../components/ChatList';
-import ChatBox from '../../components/ChatBox';
-import useInput from '../../hooks/useInput';
+import ChatList from '@components/ChatList';
+import ChatBox from '@components/ChatBox';
+import useInput from '@hooks/useInput';
 
 const Channel = () => {
   const [chat, onChangeChat, setChat] = useInput();

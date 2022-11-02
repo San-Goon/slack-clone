@@ -3,12 +3,12 @@ import { Container, Header } from './styles';
 import gravatar from 'gravatar';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
-import fetcher from '../../utils/fetcher';
-import ChatBox from '../../components/ChatBox';
-import ChatList from '../../components/ChatList';
-import useInput from '../../hooks/useInput';
+import fetcher from '@utils/fetcher';
+import ChatBox from '@components/ChatBox';
+import ChatList from '@components/ChatList';
+import useInput from '@hooks/useInput';
 import axios from 'axios';
-import { DMType } from '../../typings/db';
+import { DMType } from '@typings/db';
 
 const DirectMessage = () => {
   const { workspace, id } = useParams();

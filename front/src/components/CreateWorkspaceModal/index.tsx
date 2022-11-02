@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react';
-import Modal from '../Modal';
-import { Button, Input, Label } from '../../pages/SignUp/styles';
+import Modal from '@components/Modal';
+import { Button, Input, Label } from '@pages/SignUp/styles';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
-import useInput from '../../hooks/useInput';
+import useInput from '@hooks/useInput';
 import useSWR from 'swr';
-import { UserType } from '../../typings/db';
+import { UserType } from '@typings/db';
 import 'react-toastify/dist/ReactToastify.css';
-import fetcher from '../../utils/fetcher';
+import fetcher from '@utils/fetcher';
 
 interface PropsType {
   show: boolean;
