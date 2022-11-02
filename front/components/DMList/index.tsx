@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { UserType, UserWithOnlineType } from '@typings/db';
+import { DMType, UserType, UserWithOnlineType } from '@typings/db';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
 import fetcher from '@utils/fetcher';
 import { CollapseButton } from '@components/DMList/styles';
 import { NavLink } from 'react-router-dom';
+import useSocket from '@hooks/useSocket';
 
 const DMList = () => {
   const { data: userData } = useSWR<UserType>('/api/users', fetcher);
@@ -16,6 +17,8 @@ const DMList = () => {
   const [DMCollapse, setDMCollapse] = useState(false);
   const [countList, setCountList] = useState<{ [key: string]: number }>({});
   const [onlineList, setOnlineList] = useState<number[]>([]);
+
+  const [socket, disconnect] = useSocket(workspace);
 
   const toggleDMCollapse = useCallback(() => {
     setDMCollapse((prev) => !prev);
@@ -33,10 +36,30 @@ const DMList = () => {
     [],
   );
 
+  const onMessage = useCallback((data: DMType) => {
+    setCountList((list) => {
+      return {
+        ...list,
+        [data.SenderId]: list[data.SenderId] ? list[data.SenderId] + 1 : 1,
+      };
+    });
+  }, []);
+
   useEffect(() => {
     setOnlineList([]);
     setCountList({});
   }, [workspace]);
+
+  useEffect(() => {
+    socket?.on('onlineList', (data: number[]) => {
+      setOnlineList(data);
+    });
+    socket?.on('dm', onMessage);
+    return () => {
+      socket?.off('dm', onMessage);
+      socket?.off('onlineList');
+    };
+  }, [socket]);
 
   return (
     <>
