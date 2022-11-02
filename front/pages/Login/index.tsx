@@ -25,7 +25,7 @@ const Login = () => {
         })
         .catch((error) => {
           if (error.response.status === 401) {
-            setErrorMessage(error.response.data);
+            setErrorMessage('로그인 정보를 확인해주세요.');
           } else {
             setErrorMessage('알수없는 에러가 발생했습니다 잠시후 다시 시도해주세요.');
           }
