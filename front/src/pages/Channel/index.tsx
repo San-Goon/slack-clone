@@ -6,6 +6,7 @@ import useInput from '../../hooks/useInput';
 
 const Channel = () => {
   const [chat, onChangeChat, setChat] = useInput();
+  console.log('!!!!');
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
