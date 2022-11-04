@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { DMType, UserType, UserWithOnlineType } from '@typings/db';
+import { DMType, UserType, UserWithOnlineType } from '../../typings/db';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
+import fetcher from '../../utils/fetcher';
 import { CollapseButton } from './styles';
 import { NavLink } from 'react-router-dom';
-import useSocket from '@hooks/useSocket';
+import useSocket from '../../hooks/useSocket';
 
 const DMList = () => {
   const { data: userData } = useSWR<UserType>('/api/users', fetcher);

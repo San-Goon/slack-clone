@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { CollapseButton } from '@components/DMList/styles';
+import { CollapseButton } from '../DMList/styles';
 import useSWR from 'swr';
-import { ChannelType } from '@typings/db';
-import fetcher from '@utils/fetcher';
+import { ChannelType } from '../../typings/db';
+import fetcher from '../../utils/fetcher';
 
 const ChannelList = () => {
   const { workspace } = useParams();

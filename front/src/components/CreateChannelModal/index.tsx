@@ -1,14 +1,14 @@
 import React, { useCallback } from 'react';
-import { Button, Input, Label } from '@pages/SignUp/styles';
+import { Button, Input, Label } from '../../pages/SignUp/styles';
 import { toast, ToastContainer } from 'react-toastify';
-import useInput from '@hooks/useInput';
+import useInput from '../../hooks/useInput';
 import 'react-toastify/dist/ReactToastify.css';
-import Modal from '@components/Modal';
+import Modal from '../../components/Modal';
 import useSWR from 'swr';
-import { ChannelType } from '@typings/db';
-import axios from '@utils/axios';
+import { ChannelType } from '../../typings/db';
+import axios from '../../utils/axios';
 import { useParams } from 'react-router';
-import fetcher from '@utils/fetcher';
+import fetcher from '../../utils/fetcher';
 
 interface PropsType {
   show: boolean;

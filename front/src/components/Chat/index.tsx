@@ -1,5 +1,5 @@
 import React from 'react';
-import { DMType } from '@typings/db';
+import { DMType } from '../../typings/db';
 import { ChatWrapper } from './styles';
 import gravatar from 'gravatar';
 import dayjs from 'dayjs';

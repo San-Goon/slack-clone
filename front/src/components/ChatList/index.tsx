@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import { ChatZone } from './styles';
-import { DMType } from '@typings/db';
-import Chat from '@components/Chat';
+import { DMType } from '../../typings/db';
+import Chat from '../../components/Chat';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 interface PropsType {

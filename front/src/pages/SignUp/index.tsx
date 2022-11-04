@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Form, Header, Input, Label, Error, LinkContainer } from './styles';
-import useInput from '@hooks/useInput';
-import axios from '@utils/axios';
+import useInput from '../../hooks/useInput';
+import axios from '../../utils/axios';
 import { useNavigate, Link } from 'react-router-dom';
-import fetcher from '@utils/fetcher';
+import fetcher from '../../utils/fetcher';
 import useSWR from 'swr';
 
 const SignUp = () => {

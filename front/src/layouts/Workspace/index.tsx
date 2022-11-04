@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import useSWR from 'swr';
-import fetcher from '@utils/fetcher';
-import axios from '@utils/axios';
+import fetcher from '../../utils/fetcher';
+import axios from '../../utils/axios';
 import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import {
   AddButton,
@@ -21,20 +21,20 @@ import {
 } from './styles';
 import gravatar from 'gravatar';
 import loadable from '@loadable/component';
-import Menu from '@components/Menu';
-import { ChannelType, UserType } from '@typings/db';
+import Menu from '../../components/Menu';
+import { ChannelType, UserType } from '../../typings/db';
 import 'react-toastify/dist/ReactToastify.css';
-import CreateChannelModal from '@components/CreateChannelModal';
-import CreateWorkspaceModal from '@components/CreateWorkspaceModal';
+import CreateChannelModal from '../../components/CreateChannelModal';
+import CreateWorkspaceModal from '../../components/CreateWorkspaceModal';
 import { useParams } from 'react-router';
-import InviteWorkspaceModal from '@components/InviteWorkspaceModal';
-import InviteChannelModal from '@components/InviteChannelModal';
-import ChannelList from '@components/ChannelList';
-import DMList from '@components/DMList';
-import useSocket from '@hooks/useSocket';
+import InviteWorkspaceModal from '../../components/InviteWorkspaceModal';
+import InviteChannelModal from '../../components/InviteChannelModal';
+import ChannelList from '../../components/ChannelList';
+import DMList from '../../components/DMList';
+import useSocket from '../../hooks/useSocket';
 
-const Channel = loadable(() => import('@pages/Channel'));
-const DirectMessage = loadable(() => import('@pages/DirectMessage'));
+const Channel = loadable(() => import('../../pages/Channel'));
+const DirectMessage = loadable(() => import('../../pages/DirectMessage'));
 
 const Workspace = () => {
   const { workspace } = useParams();
