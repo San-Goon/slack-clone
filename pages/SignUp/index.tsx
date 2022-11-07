@@ -53,7 +53,7 @@ const SignUp = () => {
 
   useEffect(() => {
     if (data) {
-      navigate('/workspace/slack/channel/일반');
+      navigate('/workspace/sleact/channel/일반');
     }
   }, [data, navigate]);
 
