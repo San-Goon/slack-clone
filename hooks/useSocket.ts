@@ -15,7 +15,7 @@ const useSocket = (workspace?: string): [SocketIOClient.Socket | undefined, () =
 
   if (!workspace) return [undefined, disconnect];
 
-  // socket.io 를 쓸수 있게하는 함수. 재연결 방지를 위해 이프문에 삽입
+  // socket.io 를 쓸수 있게하는 함수. 재연결 방지를 위해 if 문에 삽입
   if (!sockets[workspace]) {
     sockets[workspace] = io.connect(`${backUrl}/ws-${workspace}`, {
       transports: ['websocket'],
