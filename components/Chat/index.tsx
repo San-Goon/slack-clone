@@ -3,12 +3,32 @@ import { DMType } from '@typings/db';
 import { ChatWrapper } from './styles';
 import gravatar from 'gravatar';
 import dayjs from 'dayjs';
+import regexifyString from 'regexify-string';
+import { Link } from 'react-router-dom';
+import { useParams } from 'react-router';
 
 interface PropsType {
   data: DMType;
 }
 
 const Chat = ({ data }: PropsType) => {
+  const { workspace } = useParams();
+  const result = regexifyString({
+    input: data.content,
+    pattern: /@\[(.+?)]\((\d+?)\)|\n/g,
+    decorator(match, index) {
+      const arr = match.match(/@\[(.+?)]\((\d+?)\)/)!;
+      if (arr) {
+        return (
+          <Link key={match + index} to={`/workspace/${workspace}/dm/${arr[2]}`}>
+            @{arr[1]}
+          </Link>
+        );
+      }
+      return <br key={index} />;
+    },
+  });
+
   const user = data.Sender;
   return (
     <ChatWrapper>
@@ -20,7 +40,7 @@ const Chat = ({ data }: PropsType) => {
           <b>{user.nickname}</b>
           <span>{dayjs(data.createdAt).format('h:mm A')}</span>
         </div>
-        <p>{data.content}</p>
+        <p>{result}</p>
       </div>
     </ChatWrapper>
   );
