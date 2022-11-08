@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { DMType } from '@typings/db';
 import { ChatWrapper } from './styles';
 import gravatar from 'gravatar';
@@ -13,21 +13,25 @@ interface PropsType {
 
 const Chat = ({ data }: PropsType) => {
   const { workspace } = useParams();
-  const result = regexifyString({
-    input: data.content,
-    pattern: /@\[(.+?)]\((\d+?)\)|\n/g,
-    decorator(match, index) {
-      const arr = match.match(/@\[(.+?)]\((\d+?)\)/)!;
-      if (arr) {
-        return (
-          <Link key={match + index} to={`/workspace/${workspace}/dm/${arr[2]}`}>
-            @{arr[1]}
-          </Link>
-        );
-      }
-      return <br key={index} />;
-    },
-  });
+  const result = useMemo(
+    () =>
+      regexifyString({
+        input: data.content,
+        pattern: /@\[(.+?)]\((\d+?)\)|\n/g,
+        decorator(match, index) {
+          const arr = match.match(/@\[(.+?)]\((\d+?)\)/)!;
+          if (arr) {
+            return (
+              <Link key={match + index} to={`/workspace/${workspace}/dm/${arr[2]}`}>
+                @{arr[1]}
+              </Link>
+            );
+          }
+          return <br key={index} />;
+        },
+      }),
+    [data.content, workspace],
+  );
 
   const user = data.Sender;
   return (
@@ -46,4 +50,4 @@ const Chat = ({ data }: PropsType) => {
   );
 };
 
-export default Chat;
+export default memo(Chat);
