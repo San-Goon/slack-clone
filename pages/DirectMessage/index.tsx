@@ -16,7 +16,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 const DirectMessage = () => {
   const { workspace, id } = useParams();
   const { data: userData } = useSWR(`/api/workspaces/${workspace}/users/${id}`, fetcher);
-
+  const { data: myData } = useSWR('/api/users', fetcher);
   const {
     data: chatData,
     mutate: mutateChat,
@@ -36,15 +36,29 @@ const DirectMessage = () => {
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if (chat?.trim()) {
+      const savedChat = chat;
+      if (chat?.trim() && chatData) {
+        mutateChat((prevChatData) => {
+          prevChatData?.[0].unshift({
+            id: (chatData[0][0]?.id || 0) + 1,
+            content: savedChat,
+            SenderId: myData.id,
+            Sender: myData,
+            ReceiverId: userData.id,
+            Receiver: userData,
+            createdAt: new Date(),
+          });
+          return prevChatData;
+        }, false).then(() => {
+          setChat('');
+          scrollbarRef.current?.scrollToBottom();
+        });
         axios
           .post(`/api/workspaces/${workspace}/dms/${id}/chats`, {
             content: chat,
           })
           .then(() => {
             mutateChat();
-            setChat('');
-            scrollbarRef.current?.scrollToBottom();
           })
           .catch((error) => console.log(error.response));
       }
