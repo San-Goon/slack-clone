@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Container, Header } from './styles';
 import gravatar from 'gravatar';
 import { useParams } from 'react-router';
@@ -16,7 +16,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 const DirectMessage = () => {
   const { workspace, id } = useParams();
   const { data: userData } = useSWR(`/api/workspaces/${workspace}/users/${id}`, fetcher);
-  const { data: myData } = useSWR('/api/users', fetcher);
+
   const {
     data: chatData,
     mutate: mutateChat,
@@ -44,12 +44,20 @@ const DirectMessage = () => {
           .then(() => {
             mutateChat();
             setChat('');
+            scrollbarRef.current?.scrollToBottom();
           })
           .catch((error) => console.log(error.response));
       }
     },
     [chat],
   );
+
+  // 스크롤바 아래로 내려주는 useEffect
+  useEffect(() => {
+    if (chatData?.length === 1) {
+      scrollbarRef.current?.scrollToBottom();
+    }
+  }, [chatData]);
 
   const chatSections = makeSection(chatData ? chatData.flat().reverse() : []);
 
