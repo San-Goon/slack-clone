@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react';
+import React, { forwardRef, MutableRefObject, useCallback } from 'react';
 import { ChatZone, Section, StickyHeader } from './styles';
 import { DMType } from '@typings/db';
 import Chat from '../Chat';
@@ -12,11 +12,19 @@ interface PropsType {
 }
 
 const ChatList = forwardRef<Scrollbars, PropsType>(({ chatSections, setSize, isEmpty, isReachingEnd }, ref) => {
-  const onScroll = useCallback((values: positionValues) => {
-    if (values.scrollTop === 0 && !isReachingEnd) {
-      setSize((prevSize) => prevSize + 1).then(() => {});
-    }
-  }, []);
+  const onScroll = useCallback(
+    (values: positionValues) => {
+      if (values.scrollTop === 0 && !isReachingEnd) {
+        setSize((prevSize) => prevSize + 1).then(() => {
+          const current = (ref as MutableRefObject<Scrollbars>)?.current;
+          if (current) {
+            current.scrollTop(current.getScrollHeight() - values.scrollHeight);
+          }
+        });
+      }
+    },
+    [ref, isReachingEnd, setSize],
+  );
 
   return (
     <ChatZone>
