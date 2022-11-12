@@ -63,7 +63,7 @@ const DirectMessage = () => {
           .catch((error) => console.log(error.response));
       }
     },
-    [chat],
+    [chat, chatData, myData, userData, workspace, id],
   );
 
   // 스크롤바 아래로 내려주는 useEffect
