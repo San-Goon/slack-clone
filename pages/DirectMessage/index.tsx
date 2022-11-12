@@ -12,6 +12,8 @@ import axios from 'axios';
 import { DMType } from '@typings/db';
 import makeSection from '@utils/makeSection';
 import { Scrollbars } from 'react-custom-scrollbars';
+import useSocket from '@hooks/useSocket';
+import { toast } from 'react-toastify';
 
 const DirectMessage = () => {
   const { workspace, id } = useParams();
@@ -72,6 +74,44 @@ const DirectMessage = () => {
       scrollbarRef.current?.scrollToBottom();
     }
   }, [chatData]);
+
+  const [socket] = useSocket(workspace);
+
+  const onMessage = useCallback(
+    (data: DMType) => {
+      if (data.SenderId === Number(id) && myData.id !== Number(id)) {
+        mutateChat((chatData) => {
+          chatData?.[0].unshift(data);
+          return chatData;
+        }, false).then(() => {
+          if (scrollbarRef.current) {
+            if (
+              scrollbarRef.current.getScrollHeight() <
+              scrollbarRef.current.getClientHeight() + scrollbarRef.current.getScrollTop() + 150
+            ) {
+              setTimeout(() => {
+                scrollbarRef.current?.scrollToBottom();
+              }, 100);
+            } else {
+              toast.success('새 메시지가 도착했습니다.', {
+                onClick() {
+                  scrollbarRef.current?.scrollToBottom();
+                },
+                closeOnClick: true,
+              });
+            }
+          }
+        });
+      }
+    },
+    [id, myData, mutateChat],
+  );
+  useEffect(() => {
+    socket?.on('dm', onMessage);
+    return () => {
+      socket?.off('dm');
+    };
+  }, [socket, id, myData, onMessage]);
 
   const chatSections = makeSection(chatData ? chatData.flat().reverse() : []);
 
