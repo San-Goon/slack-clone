@@ -1,5 +1,5 @@
 import React, { memo, useMemo } from 'react';
-import { DMType } from '@typings/db';
+import { ChatType, DMType } from '@typings/db';
 import { ChatWrapper } from './styles';
 import gravatar from 'gravatar';
 import dayjs from 'dayjs';
@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router';
 
 interface PropsType {
-  data: DMType;
+  data: DMType | ChatType;
 }
 
 const Chat = ({ data }: PropsType) => {
@@ -33,7 +33,7 @@ const Chat = ({ data }: PropsType) => {
     [data.content, workspace],
   );
 
-  const user = data.Sender;
+  const user = 'Sender' in data ? data.Sender : data.User;
   return (
     <ChatWrapper>
       <div className="chat-img">

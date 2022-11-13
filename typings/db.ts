@@ -32,3 +32,13 @@ export interface DMType {
   content: string;
   createdAt: Date;
 }
+
+export interface ChatType {
+  id: number;
+  UserId: number;
+  User: UserType;
+  content: string;
+  createdAt: Date;
+  ChannelId: number;
+  Channel: ChannelType;
+}

@@ -1,12 +1,12 @@
 import React, { forwardRef, MutableRefObject, useCallback } from 'react';
 import { ChatZone, Section, StickyHeader } from './styles';
-import { DMType } from '@typings/db';
+import { ChatType, DMType } from '@typings/db';
 import Chat from '../Chat';
 import { positionValues, Scrollbars } from 'react-custom-scrollbars';
 
 interface PropsType {
-  chatSections: { [key: string]: DMType[] };
-  setSize: (size: number | ((_size: number) => number)) => Promise<DMType[][] | undefined>;
+  chatSections: { [key: string]: (DMType | ChatType)[] };
+  setSize: (size: number | ((_size: number) => number)) => Promise<(DMType | ChatType)[][] | undefined>;
   isEmpty: boolean;
   isReachingEnd: boolean;
 }
