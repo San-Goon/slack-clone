@@ -1,6 +1,8 @@
 # SLACK
 **Slack**은 협업과 소통에 꼭! 필요한 협업 메신저 입니다. 💬 
 
+[바로가기👉](https://slack-clone-kylecho.vercel.app/)
+
 ## Installation
 ```bash
 npm run dev
