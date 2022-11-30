@@ -5,6 +5,7 @@
 
 ## Installation
 ```bash
+npm i
 npm run dev
 ```
 </br>
@@ -29,7 +30,6 @@ npm run dev
 
 ## 사용한 기술 스택
 - TypeScript
-- Node.js
 - React
 - Soket.io
 - SWR
